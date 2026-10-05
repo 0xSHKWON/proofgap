@@ -21,6 +21,7 @@ export type VerifierHit = {
 };
 
 export type ScanResult = {
+  contracts: string[]; // 소스에 있는 모든 컨트랙트 이름
   verifiers: VerifierHit[];
   // 검증기로 보이지만 템플릿이 맞지 않는 컨트랙트. 수동 검토 대기열로 간다.
   unclassified: { file: string; contract: string; reason: string }[];
@@ -31,9 +32,10 @@ export type ScanResult = {
 class ExtractError extends Error {}
 
 export function scanSources(files: SourceFile[]): ScanResult {
-  const result: ScanResult = { verifiers: [], unclassified: [], errors: [] };
+  const result: ScanResult = { contracts: [], verifiers: [], unclassified: [], errors: [] };
   for (const block of splitContracts(files)) {
     if (block.kind !== "contract") continue;
+    result.contracts.push(block.name);
     const template = classify(block.body);
     if (template === null) {
       const reason = looksLikeVerifier(block.body);
@@ -63,9 +65,12 @@ export function classify(body: string): TemplateId | null {
   return null;
 }
 
+// 템플릿 밖이지만 페어링 검증기로 보이는 컨트랙트를 수동 검토 대기열로 보내기 위한 느슨한 판별.
+// 놓치면 "검증기 아님"으로 조용히 묻히므로 넓게 잡는다 (ZoKrates의 verifyTx, Pairing 라이브러리 호출 등).
 function looksLikeVerifier(body: string): string | null {
-  if (/function\s+verifyProof\s*\(/.test(body)) return "verifyProof 함수가 있음";
-  if (/staticcall\s*\([^;]*?,\s*(?:8|0x0*8)\s*,/.test(body)) return "페어링 프리컴파일(0x08) 호출이 있음";
+  if (/function\s+(verifyProof|verifyTx)\s*\(/.test(body)) return "verifyProof/verifyTx 함수가 있음";
+  if (/(?:staticcall|call)\s*\([^;]*?,\s*(?:8|0x0*8)\s*,/.test(body)) return "페어링 프리컴파일(0x08) 호출이 있음";
+  if (/\bPairing\.pairing\w*\s*\(/.test(body)) return "Pairing 라이브러리로 페어링 검사";
   return null;
 }
 
@@ -134,7 +139,8 @@ function extractOld(block: ContractBlock, notes: string[]): VerifyingKey {
     if (!p) throw new ExtractError(`vk.IC[${i}]가 빠짐`);
     ic.push(p);
   }
-  if (ic.length === 0) throw new ExtractError("vk.IC가 없음");
+  // gnark가 만든 변형은 IC를 verifyProof 안에 인라인한다. R1·R2에는 IC가 필요 없으므로 실패로 보지 않는다.
+  if (ic.length === 0) notes.push("vk.IC 대입이 없음 (IC가 verifyProof에 인라인된 변형)");
 
   return {
     alpha: checkG1("alpha", { x: BigInt(a[1]), y: BigInt(a[2]) }),

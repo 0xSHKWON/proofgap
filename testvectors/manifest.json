@@ -297,6 +297,48 @@
       },
       "ref": "https://www.darknavy.org/web3/exploits/veil-cash-groth16-forgery/",
       "note": "사고 이후 Veil이 쓴 검증기. snarkjs 출력 그대로는 아니고 증명을 bytes로 받는 Pairing 라이브러리 계열 변형이지만, 구형으로 분류되고 추출한 점이 모두 곡선 위에 있다"
+    },
+    {
+      "id": "gnark-style-inline-ic",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0xa8710b3ba329fc7b80a49f7c82e889d1340c99fb"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": []
+      },
+      "note": "단계 1 스캔에서 찾은 회귀 벡터. 구형 Pairing 구조지만 IC를 verifyProof에 인라인한 gnark 변형이라 vk.IC 대입이 없음. 예전에는 추출 실패로 처리됐음"
+    },
+    {
+      "id": "babyzk-boolean-verifier",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0x03d01b9d3f3ef125bdfc4a66dcb4362d4064e522"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": []
+      },
+      "note": "단계 1 스캔에서 찾은 회귀 벡터. 검증키를 돌려주는 vks 배열에 γ가 한 번 더 들어 있어 바이트코드의 G2 생성원 등장 횟수가 2. 바이트코드 신호만으로는 오탐이 나는 사례"
+    },
+    {
+      "id": "zokrates-style-verifytx",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0x8d993aaf8e92c2027a5358b9914392050b03356d"
+      },
+      "expect": {
+        "template": null,
+        "rules": []
+      },
+      "note": "단계 1 스캔에서 찾은 회귀 벡터. verifyTx와 Pairing 라이브러리를 쓰는 템플릿 밖 검증기. 예전에는 검증기 아님으로 빠졌고, 이제 수동 검토 대기열로 가야 함"
     }
   ]
 }
