@@ -1,0 +1,19 @@
+{
+  "name": "proofgap",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "bin": { "proofgap": "./bin/proofgap.ts" },
+  "scripts": {
+    "proofgap": "node bin/proofgap.ts",
+    "typecheck": "tsc --noEmit",
+    "test": "node bin/proofgap.ts testvectors check"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.0",
+    "snarkjs": "0.7.6",
+    "snarkjs-old": "npm:snarkjs@0.6.11",
+    "typescript": "^5.9.0"
+  }
+}

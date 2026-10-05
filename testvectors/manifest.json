@@ -1,0 +1,302 @@
+{
+  "vectors": [
+    {
+      "id": "veil-verifier",
+      "set": "known-positive",
+      "source": {
+        "kind": "onchain",
+        "chain": "base",
+        "address": "0x1E65C075989189E607ddaFA30fa1a0001c376cfd"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": [
+          "R1",
+          "R2"
+        ]
+      },
+      "ref": "https://www.darknavy.org/web3/exploits/veil-cash-groth16-forgery/",
+      "note": "Veil 0.1 ETH 풀 등 레거시 풀 6개가 verifier()로 이 주소를 가리킴"
+    },
+    {
+      "id": "veil-pool-0.1eth-flattened",
+      "set": "known-positive",
+      "source": {
+        "kind": "onchain",
+        "chain": "base",
+        "address": "0xD3560eF60Dd06E27b699372c3da1b741c80B7D90"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": [
+          "R1",
+          "R2"
+        ]
+      },
+      "ref": "https://www.darknavy.org/web3/exploits/veil-cash-groth16-forgery/",
+      "note": "풀 소스 안에 결함 있는 검증기가 평탄화되어 함께 들어 있음. 여러 컨트랙트가 섞인 파일에서 분류가 되는지 확인하는 용도"
+    },
+    {
+      "id": "foom-withdraw-verifier-base",
+      "set": "known-positive",
+      "source": {
+        "kind": "onchain",
+        "chain": "base",
+        "address": "0x02c30D32A92a3C338bc43b78933D293dED4f68C6"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": [
+          "R1",
+          "R2"
+        ]
+      },
+      "ref": "https://rekt.news/the-unfinished-proof",
+      "note": "FoomLottery(0xdb20…aafd)의 withdraw 검증기"
+    },
+    {
+      "id": "foom-withdraw-verifier-ethereum",
+      "set": "known-positive",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0xc043865fb4D542E2bc5ed5Ed9A2F0939965671A6"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": [
+          "R1",
+          "R2"
+        ]
+      },
+      "ref": "https://rekt.news/the-unfinished-proof",
+      "note": "FoomLottery(0x239a…51f8)의 withdraw 검증기. 같은 주소가 Base에서는 Update5 검증기이므로 체인과 함께 식별해야 함"
+    },
+    {
+      "id": "syn-multiplier-skip-phase2-new",
+      "set": "synthetic-positive",
+      "source": {
+        "kind": "file",
+        "path": "testvectors/synthetic/multiplier.skip-phase2.new.sol"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": [
+          "R1",
+          "R2"
+        ]
+      }
+    },
+    {
+      "id": "syn-multiplier-skip-phase2-old",
+      "set": "synthetic-positive",
+      "source": {
+        "kind": "file",
+        "path": "testvectors/synthetic/multiplier.skip-phase2.old.sol"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": [
+          "R1",
+          "R2"
+        ]
+      }
+    },
+    {
+      "id": "syn-multiplier-phase2-new",
+      "set": "synthetic-negative",
+      "source": {
+        "kind": "file",
+        "path": "testvectors/synthetic/multiplier.phase2.new.sol"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": []
+      }
+    },
+    {
+      "id": "syn-multiplier-phase2-old",
+      "set": "synthetic-negative",
+      "source": {
+        "kind": "file",
+        "path": "testvectors/synthetic/multiplier.phase2.old.sol"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": []
+      }
+    },
+    {
+      "id": "syn-product3-skip-phase2-new",
+      "set": "synthetic-positive",
+      "source": {
+        "kind": "file",
+        "path": "testvectors/synthetic/product3.skip-phase2.new.sol"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": [
+          "R1",
+          "R2"
+        ]
+      }
+    },
+    {
+      "id": "syn-product3-skip-phase2-old",
+      "set": "synthetic-positive",
+      "source": {
+        "kind": "file",
+        "path": "testvectors/synthetic/product3.skip-phase2.old.sol"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": [
+          "R1",
+          "R2"
+        ]
+      }
+    },
+    {
+      "id": "syn-product3-phase2-new",
+      "set": "synthetic-negative",
+      "source": {
+        "kind": "file",
+        "path": "testvectors/synthetic/product3.phase2.new.sol"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": []
+      }
+    },
+    {
+      "id": "syn-product3-phase2-old",
+      "set": "synthetic-negative",
+      "source": {
+        "kind": "file",
+        "path": "testvectors/synthetic/product3.phase2.old.sol"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": []
+      }
+    },
+    {
+      "id": "handcrafted-gnark-style-skip-phase2",
+      "set": "synthetic-positive",
+      "source": {
+        "kind": "file",
+        "path": "testvectors/handcrafted/gnark-style-skip-phase2.sol"
+      },
+      "expect": {
+        "template": null,
+        "rules": []
+      },
+      "note": "γ == δ 결함이 있지만 템플릿 밖이다. 자동 판정하지 않고 수동 검토 대기열로 가는지 확인하는 용도"
+    },
+    {
+      "id": "privacypools-withdrawal-verifier",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0x022891f938ae7fdc8ab9ead0fbf50aba8c897d6d"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": []
+      },
+      "ref": "https://docs.privacypools.com/deployments",
+      "note": "세레모니: https://0xbow.io/blog/celebrating-the-conclusion-of-the-trusted-setup-ceremony"
+    },
+    {
+      "id": "privacypools-commitment-verifier",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0xa45aca8604a73d80c551faad6355a5c3a5565ec6"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-new",
+        "rules": []
+      },
+      "ref": "https://docs.privacypools.com/deployments",
+      "note": "문서상 이름은 RagequitVerifier. 세레모니는 위와 같음"
+    },
+    {
+      "id": "tornado-eth-verifier",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0xce172ce1F20EC0B3728c9965470eaf994A03557A"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": []
+      },
+      "ref": "https://github.com/tornadocash/tornado-cli/blob/master/config.js",
+      "note": "ETH 풀 4개의 verifier(). 구형 템플릿 변형 (값을 uint256(...)로 감쌈). 세레모니: https://tornado-cash.medium.com/the-biggest-trusted-setup-ceremony-in-the-world-3c6ab9c8fffa"
+    },
+    {
+      "id": "hermez-verifier400",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0x3DAa0B2a994b1BC60dB9e312aD0a8d87a1Bb16D2"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": []
+      },
+      "ref": "https://github.com/hermeznetwork/phase2ceremony_4",
+      "note": "Hermez 프록시 0xA68D…A633의 rollupVerifiers(0)"
+    },
+    {
+      "id": "hermez-verifier2048",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0x1DC4b451DFcD0e848881eDE8c7A99978F00b1342"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": []
+      },
+      "ref": "https://github.com/hermeznetwork/phase2ceremony_4",
+      "note": "Hermez 프록시의 rollupVerifiers(1)"
+    },
+    {
+      "id": "hermez-verifier-withdraw",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "ethereum",
+        "address": "0x4464A1E499cf5443541da6728871af1D5C4920ca"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": []
+      },
+      "ref": "https://github.com/hermeznetwork/phase2ceremony_4",
+      "note": "Hermez 프록시의 withdrawVerifier()"
+    },
+    {
+      "id": "veil-verifier16",
+      "set": "real-negative",
+      "source": {
+        "kind": "onchain",
+        "chain": "base",
+        "address": "0xB5e025044b09cAe75bace1c8dB9701aE383792e4"
+      },
+      "expect": {
+        "template": "snarkjs-groth16-old",
+        "rules": []
+      },
+      "ref": "https://www.darknavy.org/web3/exploits/veil-cash-groth16-forgery/",
+      "note": "사고 이후 Veil이 쓴 검증기. snarkjs 출력 그대로는 아니고 증명을 bytes로 받는 Pairing 라이브러리 계열 변형이지만, 구형으로 분류되고 추출한 점이 모두 곡선 위에 있다"
+    }
+  ]
+}
