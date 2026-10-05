@@ -4,7 +4,7 @@
 
 **proofgap**은 체인에 배포된 ZK 검증 컨트랙트에서 **경계 결함**을 찾아내는 스캐너입니다. 경계 결함이란 증명 시스템은 설계대로 작동했는데, 그 바깥(셋업, 정산 로직, 검증 범위)이 잘못돼 생기는 결함을 말합니다. 결함이 있는 검증기를 찾으면, 그 검증기를 믿는 컨트랙트에 자산이 얼마나 묶여 있는지까지 함께 확인합니다.
 
-> **상태: 단계 0 완료 (테스트 벡터 20개 전부 기대대로 판정).** `testvectors build`·`check`만 구현돼 있고, `scan` 등 나머지 명령어와 인터페이스는 계획입니다.
+> **상태: 단계 1 진행 중.** 테스트 벡터(`testvectors`), 후보 수집(`candidates`), 판정(`scan`), 요약(`report`)이 구현돼 있습니다. 노출 연결 이후 단계는 계획입니다.
 
 ---
 
@@ -78,8 +78,9 @@ proofgap/
 - Node.js 24 이상: TypeScript를 빌드 없이 바로 실행합니다
 - [circom](https://docs.circom.io/) 2.1 이상과 [snarkjs](https://github.com/iden3/snarkjs): 테스트 벡터 생성. snarkjs는 `npm install`로 신형(0.7.6)·구형(0.6.11) 템플릿용 버전이 함께 설치됩니다
 - [Foundry](https://book.getfoundry.sh/): 로컬 재현
-- 블록 탐색기 API 키 또는 [Sourcify](https://sourcify.dev/): 검증된 소스 수집
-- 아카이브 노드 RPC: 호출자 탐색과 잔고 조회
+- [Blockscout](https://www.blockscout.com/) API: 검증된 소스 수집과 Base 후보 수집. 키 없이 되지만 한도가 낮아서 `BLOCKSCOUT_API_KEY`를 넣으면 빨라집니다
+- [BigQuery](https://cloud.google.com/bigquery) (`bq` CLI): 이더리움 후보 수집. 무료 샌드박스로 충분합니다
+- 아카이브 노드 RPC: 호출자 탐색과 잔고 조회 (단계 2)
 
 ```bash
 npm install
@@ -89,13 +90,25 @@ npm link        # proofgap 명령어 등록 (또는 node bin/proofgap.ts ...)
 proofgap testvectors build    # 합성 벡터 재생성 + 체인 벡터 소스 수집 (circom 필요)
 proofgap testvectors check    # 저장된 벡터만으로 판정 (npm test와 같음, 네트워크 불필요)
 
-# 아래는 계획
 # 단일 컨트랙트 검사
 proofgap scan --chain base --address 0x...
 
-# 전수 스캔
-proofgap scan --chain ethereum --all
+# 후보 수집 → 전체 판정 → 요약. 결과는 data/에 저장되고 커밋되지 않습니다
+proofgap candidates bigquery --chain ethereum --dry-run   # 처리량만 확인
+proofgap candidates bigquery --chain ethereum
+proofgap candidates crawl  --chain base --days 30          # 페어링 프리컴파일 호출자, 이어서 실행 가능
+proofgap candidates search --chain base --term Verifier    # 검증 컨트랙트 이름 검색
+proofgap scan   --chain base --all
+proofgap report --chain base
 ```
+
+후보 수집 경로마다 커버리지가 다릅니다.
+
+| 경로 | 체인 | 잡는 것 | 놓치는 것 |
+| --- | --- | --- | --- |
+| `bigquery` | 이더리움 | 바이트코드에 G2 생성원이 있는 모든 컨트랙트 (소스 미검증 포함) | 데이터셋 갱신 이후 배포분 |
+| `crawl` | Base | 최근 기간에 실제로 호출된 검증기 | 그 기간에 호출되지 않은 검증기 (Blockscout가 오래된 구간에서 타임아웃) |
+| `search` | 둘 다 | 이름에 검색어가 들어간 검증된 컨트랙트 | 이름을 바꾼 검증기, 소스 미검증 컨트랙트 |
 
 ## 테스트 벡터
 
