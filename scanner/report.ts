@@ -43,11 +43,14 @@ export function printReport(chain: Chain): void {
     console.log(`\n${title} (${rows.length})`);
     for (const r of rows) console.log(`  ${r.address}  ${r.name ?? "-"}  ${line(r)}`);
   };
-  show("detected", "탐지 — 비공개. 공개 전에 docs/disclosure.md 절차를 따를 것", (r) =>
-    r.verifiers
-      .filter((v) => v.rules.length)
-      .map((v) => `${v.contract}[${v.rules.join(",")}]`)
-      .join(" "),
+  show(
+    "detected",
+    "탐지 — 비공개. 공개 전에 docs/disclosure.md 절차를 따를 것",
+    (r) =>
+      r.verifiers
+        .filter((v) => v.main && v.rules.length)
+        .map((v) => `${v.contract}[${v.rules.join(",")}]`)
+        .join(" ") + (r.verifiedTwin ? ` (twin ${r.verifiedTwin}의 소스로 판정 — 바이트코드 확인 필요)` : ""),
   );
   show("embedded", "소스에만 포함된 탐지 검증기 — 이 컨트랙트가 실제로 호출하는 검증기 주소를 따로 확인할 것", (r) =>
     r.verifiers

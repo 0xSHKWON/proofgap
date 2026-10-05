@@ -55,7 +55,14 @@ type SmartContractResponse = {
 };
 
 export async function fetchContract(chain: Chain, address: string): Promise<ContractInfo> {
-  const j = await getJson<SmartContractResponse>(`${CHAINS[chain].blockscout}/api/v2/smart-contracts/${address}`);
+  let j: SmartContractResponse;
+  try {
+    j = await getJson<SmartContractResponse>(`${CHAINS[chain].blockscout}/api/v2/smart-contracts/${address}`);
+  } catch (e) {
+    // Blockscout가 인덱싱하지 않은 주소는 404다. Sourcify에는 있을 수 있다.
+    if (!(e instanceof HttpError && e.status === 404)) throw e;
+    return { source: await fetchSourcify(chain, address), implementations: [], g2GenCount: null };
+  }
   const implementations = (j.implementations ?? []).map((i) => i.address_hash.toLowerCase());
   const g2GenCount = j.deployed_bytecode ? countG2Generator(j.deployed_bytecode) : null;
   if (!j.source_code) return { source: await fetchSourcify(chain, address), implementations, g2GenCount };

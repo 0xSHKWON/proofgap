@@ -78,7 +78,7 @@ proofgap/
 - Node.js 24 이상: TypeScript를 빌드 없이 바로 실행합니다
 - [circom](https://docs.circom.io/) 2.1 이상과 [snarkjs](https://github.com/iden3/snarkjs): 테스트 벡터 생성. snarkjs는 `npm install`로 신형(0.7.6)·구형(0.6.11) 템플릿용 버전이 함께 설치됩니다
 - [Foundry](https://book.getfoundry.sh/): 로컬 재현
-- [Blockscout](https://www.blockscout.com/) API: 검증된 소스 수집과 Base 후보 수집. 키 없이 되지만 한도가 낮아서 `BLOCKSCOUT_API_KEY`를 넣으면 빨라집니다
+- [Blockscout](https://www.blockscout.com/) API와 [Sourcify](https://sourcify.dev/): 검증된 소스 수집과 Base 후보 수집. 키 없이 씁니다 (Blockscout 익명 한도 IP당 분당 300회)
 - [BigQuery](https://cloud.google.com/bigquery) (`bq` CLI): 이더리움 후보 수집. 무료 샌드박스로 충분합니다
 - 아카이브 노드 RPC: 호출자 탐색과 잔고 조회 (단계 2)
 

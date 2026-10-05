@@ -1,8 +1,8 @@
 // Blockscout 같은 공개 API용 GET.
 //
-// Blockscout 익명 한도: 초당 10회 정도에, 오래 몰아서 부르면 수십 초 동안 전부 429가 된다.
+// Blockscout 익명 한도는 IP당 분당 300회이고, 넘기면 수십 초 동안 전부 429가 된다.
 // 429는 x-ratelimit-reset(밀리초)만큼 기다렸다가 재시도 횟수와 상관없이 다시 시도하고,
-// 요청 사이에 최소 간격을 둔다. BLOCKSCOUT_API_KEY가 있으면 apikey 파라미터로 붙인다.
+// 요청 사이에 최소 간격(기본 400ms, 분당 150회)을 둔다.
 // 5xx·Cloudflare 524·타임아웃은 지수 백오프로 재시도한다.
 
 export class HttpError extends Error {
@@ -24,12 +24,6 @@ async function throttle(): Promise<void> {
   if (wait > 0) await sleep(wait);
 }
 
-function withApiKey(url: string): string {
-  const key = process.env.BLOCKSCOUT_API_KEY;
-  if (!key || !url.includes("blockscout.com")) return url;
-  return `${url}${url.includes("?") ? "&" : "?"}apikey=${encodeURIComponent(key)}`;
-}
-
 export async function getJson<T>(url: string, opts: { retries?: number; timeoutMs?: number } = {}): Promise<T> {
   const retries = opts.retries ?? 4;
   const timeoutMs = opts.timeoutMs ?? 60_000;
@@ -39,7 +33,7 @@ export async function getJson<T>(url: string, opts: { retries?: number; timeoutM
   while (attempt <= retries) {
     await throttle();
     try {
-      const res = await fetch(withApiKey(url), { signal: AbortSignal.timeout(timeoutMs) });
+      const res = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
       if (res.ok) return (await res.json()) as T;
       lastError = new HttpError(url, res.status);
       if (res.status === 429 && rateLimitedMs < MAX_RATE_LIMIT_WAIT_MS) {
