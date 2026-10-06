@@ -167,24 +167,6 @@ proofgap dashboard
 - 옵티마이저가 같은 상수를 합치거나(L15) 데이터 영역으로 옮기면(L33) 바이트코드에서 δ가 사라짐
 - 소스 판정 867개와 대조해 바이트코드 판정 기준을 정함 (L28~L30)
 
-## 로드맵
-
-- [x] **단계 0. 테스트 벡터:** 4개 세트가 모두 기대한 대로 판정됨
-- [x] **단계 1. 스캐너 코어:** 이더리움·Base 스캔, 미분류 목록 확보 (Base는 위 커버리지 한계 있음)
-- [x] **단계 2. 노출 연결:** 확인된 모든 건에 자산 유무 판정
-- [x] **단계 3. 트리아지·디스클로저:** 자산이 묶인 건 없음 (P0 0건)
-- [x] **단계 4. 확장:** 소스 미검증 바이트코드, 체인 추가(Arbitrum·Optimism·Polygon), R3. BNB와 R4는 보류
-- [x] **단계 5. 공개:** [스캔 통계 페이지](https://0xshkwon.github.io/proofgap/stats/)
-
-## 팀
-
-| 역할 | 담당 | 맡는 것 |
-| --- | --- | --- |
-| E1 | 수집·파싱 | `scanner/` |
-| E2 | 규칙·검증·디스클로저 | `rules/`, `testvectors/`, `triage/` |
-| E3 | 노출·데이터·화면 | `exposure/`, `dashboard/` |
-| PM | 범위·편집 | `docs/`, 트러블슈팅 로그 |
-
 ## 참고 자료
 
 - [The First ZK Exploits Happened, and They Weren't What We Expected](https://blog.zksecurity.xyz/posts/groth16-setup-exploit/) (ZKSecurity)
