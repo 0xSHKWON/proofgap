@@ -2,6 +2,8 @@
 import { parseArgs } from "node:util";
 import { crawlPrecompile, importCsv, runBigQuery, searchByName } from "../scanner/candidates.ts";
 import { type Chain, isChain } from "../scanner/fetch.ts";
+import { runBytecodeRefs } from "../exposure/bytecode-refs.ts";
+import { checkExposure, printExposure, runExposure } from "../exposure/index.ts";
 import { printReport } from "../scanner/report.ts";
 import { scanAddress, scanCandidates, type ScanStatus } from "../scanner/scan.ts";
 import { buildTestVectors } from "../testvectors/build.ts";
@@ -20,6 +22,11 @@ const USAGE = `사용법:
   proofgap scan --chain C --all [--rescan [--status error,not-verifier]] [--concurrency 4]
                                                 수집한 후보 전체 판정 (--status: 그 상태인 것만 다시 판정)
   proofgap report --chain C                     결과 요약, 탐지·미분류 목록
+
+  proofgap exposure --chain C [--refresh]       탐지 전체의 호출자·잔고·권한 확인 후 요약 (확인한 건은 건너뜀)
+  proofgap exposure --chain C --address 0x...   검증기 하나만 확인 (저장하지 않음)
+  proofgap exposure --chain C --report          저장된 결과 요약만
+  proofgap exposure refs --chain ethereum [--dry-run]   바이트코드에 검증기 주소가 있는 컨트랙트 (BigQuery)
 
   C = ethereum | base. 수집·판정 결과는 data/에 저장되고 커밋되지 않는다.`;
 
@@ -43,6 +50,7 @@ async function main(argv: string[]): Promise<number> {
       file: { type: "string" },
       via: { type: "string", default: "import" },
       refresh: { type: "boolean", default: false },
+      report: { type: "boolean", default: false },
     },
   });
   const [cmd, sub] = positionals;
@@ -70,6 +78,19 @@ async function main(argv: string[]): Promise<number> {
     const statuses = values.status?.split(",") as ScanStatus[] | undefined;
     await scanCandidates(chain, { concurrency: Number(values.concurrency), rescan: values.rescan, statuses, log });
     printReport(chain);
+    return 0;
+  }
+  if (cmd === "exposure") {
+    if (sub === "refs") {
+      runBytecodeRefs(chain, { dryRun: values["dry-run"], log });
+      return 0;
+    }
+    if (values.address) {
+      console.log(JSON.stringify(await checkExposure(chain, values.address, null), null, 2));
+    } else {
+      if (!values.report) await runExposure(chain, { refresh: values.refresh, log });
+      printExposure(chain);
+    }
     return 0;
   }
   if (cmd === "report") {

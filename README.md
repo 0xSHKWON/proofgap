@@ -4,7 +4,7 @@
 
 **proofgap**은 체인에 배포된 ZK 검증 컨트랙트에서 **경계 결함**을 찾아내는 스캐너입니다. 경계 결함이란 증명 시스템은 설계대로 작동했는데, 그 바깥(셋업, 정산 로직, 검증 범위)이 잘못돼 생기는 결함을 말합니다. 결함이 있는 검증기를 찾으면, 그 검증기를 믿는 컨트랙트에 자산이 얼마나 묶여 있는지까지 함께 확인합니다.
 
-> **상태: 단계 1 진행 중.** 테스트 벡터(`testvectors`), 후보 수집(`candidates`), 판정(`scan`), 요약(`report`)이 구현돼 있습니다. 노출 연결 이후 단계는 계획입니다.
+> **상태: 단계 2 완료, 단계 3(트리아지·디스클로저) 대기.** 테스트 벡터(`testvectors`), 후보 수집(`candidates`), 판정(`scan`), 요약(`report`), 노출 연결(`exposure`)이 구현돼 있습니다. 트리아지·디스클로저 이후 단계는 계획입니다.
 
 ---
 
@@ -100,6 +100,10 @@ proofgap candidates crawl  --chain base --days 30          # 페어링 프리컴
 proofgap candidates search --chain base --term Verifier    # 검증 컨트랙트 이름 검색
 proofgap scan   --chain base --all
 proofgap report --chain base
+
+# 노출 연결: 탐지된 검증기마다 호출자 → 잔고 → 권한 (결과는 data/exposure/, 커밋되지 않음)
+proofgap exposure --chain base
+proofgap exposure --chain base --report
 ```
 
 후보 수집 경로마다 커버리지가 다릅니다.
@@ -144,7 +148,7 @@ proofgap report --chain base
 
 - [x] **단계 0. 테스트 벡터:** 4개 세트가 모두 기대한 대로 판정됨
 - [ ] **단계 1. 스캐너 코어:** 이더리움·Base 전수 스캔, 미분류 목록 확보
-- [ ] **단계 2. 노출 연결:** 확인된 모든 건에 자산 유무 판정
+- [x] **단계 2. 노출 연결:** 확인된 모든 건에 자산 유무 판정
 - [ ] **단계 3. 트리아지·디스클로저:** 자산이 묶인 건 전부 제보 완료
 - [ ] **단계 4. 확장:** 소스 미검증 바이트코드, 체인 추가, R3·R4
 - [ ] **단계 5. 공개:** 집계 통계 페이지, 스코어카드 파일럿, 아티클

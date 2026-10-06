@@ -33,7 +33,9 @@ export async function getJson<T>(url: string, opts: { retries?: number; timeoutM
   while (attempt <= retries) {
     await throttle();
     try {
+      const started = Date.now();
       const res = await fetch(url, { signal: AbortSignal.timeout(timeoutMs) });
+      if (process.env.PROOFGAP_DEBUG) console.error(`[http] ${res.status} ${Date.now() - started}ms ${url}`);
       if (res.ok) return (await res.json()) as T;
       lastError = new HttpError(url, res.status);
       if (res.status === 429 && rateLimitedMs < MAX_RATE_LIMIT_WAIT_MS) {
