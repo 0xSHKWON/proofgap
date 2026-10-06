@@ -11,5 +11,5 @@
     "skipLibCheck": true,
     "types": ["node"]
   },
-  "include": ["bin", "scanner", "rules", "testvectors", "lib"]
+  "include": ["bin", "scanner", "rules", "testvectors", "lib", "exposure"]
 }
