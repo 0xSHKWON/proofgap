@@ -4,7 +4,7 @@
 
 **proofgap**은 체인에 배포된 ZK 검증 컨트랙트에서 **경계 결함**을 찾아내는 스캐너입니다. 경계 결함이란 증명 시스템은 설계대로 작동했는데, 그 바깥(셋업, 정산 로직, 검증 범위)이 잘못돼 생기는 결함을 말합니다. 결함이 있는 검증기를 찾으면, 그 검증기를 믿는 컨트랙트에 자산이 얼마나 묶여 있는지까지 함께 확인합니다.
 
-> **상태: 단계 4 진행 중 (소스 미검증 바이트코드 판정).** 테스트 벡터(`testvectors`), 후보 수집(`candidates`), 판정(`scan`, `bytecode`), 요약(`report`), 노출 연결(`exposure`), 트리아지(`triage`)가 구현돼 있습니다. Arbitrum·Optimism·Polygon을 추가했고, BNB와 R3·R4는 계획입니다.
+> **상태: 단계 4 완료.** 테스트 벡터(`testvectors`), 후보 수집(`candidates`), 판정(`scan`, `bytecode`), 요약(`report`), 노출 연결(`exposure`), 트리아지(`triage`)가 구현돼 있습니다. Arbitrum·Optimism·Polygon과 R3를 추가했고, BNB와 R4는 보류했습니다.
 
 ---
 
@@ -40,7 +40,7 @@
 | --- | --- | --- | --- |
 | R1 | γ == δ | 치명 | 단계 1 |
 | R2 | δ == BN254 G2 기본 생성원 | 치명 | 단계 1 |
-| R3 | 같은 δ가 서로 다른 회로의 검증기에서 재사용됨 | 정보 | 후보 |
+| R3 | 같은 δ가 서로 다른 회로의 검증기에서 재사용됨 | 정보 | 단계 4 |
 | R4 | 공개 입력에 스칼라 필드 범위 검사가 없음 | 높음 (조건부) | 후보 |
 
 **주의: γ가 생성원인 것은 정상입니다.** snarkjs는 γ를 G2 생성원으로 고정하고 Phase 2에서 δ만 무작위화합니다. "γ == 생성원"을 규칙으로 쓰면 정상적인 검증기가 전부 걸립니다. 자세한 내용은 [`docs/rules.md`](docs/rules.md)를 참고하세요.
@@ -106,6 +106,9 @@ proofgap report --chain base
 proofgap bytecode check --chain ethereum
 proofgap bytecode scan  --chain ethereum
 
+# R3: 모든 체인에서 같은 δ를 서로 다른 회로가 재사용한 묶음
+proofgap rules r3
+
 # 노출 연결: 탐지된 검증기마다 호출자 → 잔고 → 권한 (결과는 data/exposure/, 커밋되지 않음)
 proofgap exposure --chain base
 proofgap exposure --chain base --report
@@ -159,7 +162,7 @@ proofgap triage draft --chain base --address 0x...
 - [ ] **단계 1. 스캐너 코어:** 이더리움·Base 전수 스캔, 미분류 목록 확보
 - [x] **단계 2. 노출 연결:** 확인된 모든 건에 자산 유무 판정
 - [x] **단계 3. 트리아지·디스클로저:** 자산이 묶인 건 전부 제보 완료
-- [ ] **단계 4. 확장:** 소스 미검증 바이트코드, 체인 추가, R3·R4
+- [x] **단계 4. 확장:** 소스 미검증 바이트코드, 체인 추가(Arbitrum·Optimism·Polygon), R3. BNB(무료 후보 수집 경로 없음)와 R4는 보류
 - [ ] **단계 5. 공개:** 집계 통계 페이지, 스코어카드 파일럿, 아티클
 
 ## 팀

@@ -14,7 +14,8 @@
 // 옵티마이저 runs가 낮으면(예: 20) 여러 번 쓰는 상수를 PUSH 대신 데이터 영역에 두고 CODECOPY로 읽는다.
 // γ == δ면 생성원 좌표가 두 번 쓰여 PUSH에서 사라지므로, 좌표가 바이트코드 어딘가에 있기만 해도 suspect로 본다 (L33).
 
-import { G2_GENERATOR, g2Eq, type G2, isOnCurveG2 } from "../lib/bn254.ts";
+import { type G1, G2_GENERATOR, g2Eq, type G2, isOnCurveG1, isOnCurveG2 } from "../lib/bn254.ts";
+import { type Fingerprint, fingerprint } from "../lib/fingerprint.ts";
 
 const GENERATOR_HEX = [G2_GENERATOR.x.im, G2_GENERATOR.x.re, G2_GENERATOR.y.im, G2_GENERATOR.y.re].map((v) =>
   v.toString(16).padStart(64, "0"),
@@ -26,6 +27,8 @@ export type BytecodeAnalysis = {
   verdict: BytecodeVerdict;
   g2Points: number; // 서로 다른 G2 점 개수 (생성원 포함)
   generatorSites: number; // 생성원이 G2 점으로 나온 자리 수
+  // β·γ·δ가 연달아 나오면 δ와 바이트코드의 G1 점(α, IC) 목록. R3용
+  fingerprint?: Fingerprint;
 };
 
 // 좌표는 254비트라 앞자리가 0인 바이트가 몇 개 있어도 PUSH24 이상으로 들어간다.
@@ -61,6 +64,7 @@ export function analyzeBytecode(bytecode: string): BytecodeAnalysis {
   const points: G2[] = [];
   let generatorSites = 0;
   let pattern = false;
+  let delta: G2 | null = null;
   for (let i = 0; i < at.length; i++) {
     const p = at[i];
     if (!p) continue;
@@ -69,6 +73,7 @@ export function analyzeBytecode(bytecode: string): BytecodeAnalysis {
     const g = at[i + 4] ?? null;
     const d = at[i + 8] ?? null;
     if (g && d && g2Eq(g, d) && !g2Eq(p, g)) pattern = true;
+    if (g && d && !delta && !g2Eq(p, g)) delta = d;
   }
   const others = points.filter((p) => !isGen(p)).length;
   const lower = bytecode.toLowerCase();
@@ -80,5 +85,23 @@ export function analyzeBytecode(bytecode: string): BytecodeAnalysis {
       : (generatorSites > 0 || generatorInData) && others === 1
         ? "suspect"
         : "not-groth16";
-  return { verdict, g2Points: points.length, generatorSites };
+  return {
+    verdict,
+    g2Points: points.length,
+    generatorSites,
+    ...(delta ? { fingerprint: fingerprint(delta, g1Points(c)) } : {}),
+  };
+}
+
+// 연속된 두 상수가 G1 위의 점이 되는 곳. 검증키의 α와 IC 점이다.
+// 신형 템플릿은 IC1부터 y를 x보다 먼저 넣으므로(IC0.x, IC0.y, IC1.y, IC1.x, ...) 반대 순서도 본다.
+function g1Points(c: bigint[]): G1[] {
+  const out: G1[] = [];
+  for (let i = 0; i + 1 < c.length; i++) {
+    const p = { x: c[i], y: c[i + 1] };
+    const q = { x: c[i + 1], y: c[i] };
+    if (isOnCurveG1(p)) out.push(p);
+    else if (isOnCurveG1(q)) out.push(q);
+  }
+  return out;
 }

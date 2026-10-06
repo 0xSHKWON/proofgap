@@ -468,5 +468,14 @@
       "path": "testvectors/synthetic/bytecode/product3.phase2.old.size.hex",
       "expect": "clean"
     }
-  ]
+  ],
+  "r3Groups": [
+    [
+      "syn-multiplier-phase2-new",
+      "syn-multiplier-phase2-old",
+      "syn-product3-phase2-new",
+      "syn-product3-phase2-old"
+    ]
+  ],
+  "r3Note": "합성 phase2 벡터는 두 회로 모두 같은 비컨 값으로 Phase 2를 만들어 δ가 같다. 그 밖의 벡터에는 R3 묶음이 없어야 한다"
 }

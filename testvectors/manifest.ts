@@ -25,11 +25,12 @@ export type Vector = {
 // 바이트코드 판정용 벡터: 합성 검증기를 옵티마이저 켬·끔으로 컴파일한 런타임 바이트코드
 export type BytecodeVector = { id: string; path: string; expect: BytecodeVerdict; note?: string };
 
-type Manifest = { vectors: Vector[]; bytecodeVectors: BytecodeVector[] };
+type Manifest = { vectors: Vector[]; bytecodeVectors: BytecodeVector[]; r3Groups?: string[][] };
 const readManifest = () => JSON.parse(readFileSync(join(TV_DIR, "manifest.json"), "utf8")) as Manifest;
 
 export const loadManifest = (): Vector[] => readManifest().vectors;
 export const loadBytecodeVectors = (): BytecodeVector[] => readManifest().bytecodeVectors ?? [];
+export const loadR3Groups = (): string[][] => readManifest().r3Groups ?? [];
 
 export function onchainPath(chain: Chain, address: string): string {
   return join(TV_DIR, "onchain", chain, `${address.toLowerCase()}.json`);
