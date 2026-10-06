@@ -171,8 +171,12 @@ function publicSections(s: PublicStats): string {
   const accuracy = `<h2>판정 정확도</h2>
 <p class="sub">소스가 검증된 검증기는 소스로 판정하고(정답), 같은 검증기를 바이트코드만으로 다시 판정해 비교했다.
 소스가 없는 컨트랙트는 바이트코드 판정만 쓴다. 기준은 <a href="https://github.com/0xSHKWON/proofgap/blob/main/docs/rules.md">docs/rules.md</a>.</p>
-<div class="tiles">${tile("대조한 검증기", num(a.labeled))}${tile("오탐", num(a.falsePositive), "소스 정상 → 바이트코드 탐지")}
-${tile("놓침", num(a.falseNegative), "소스 탐지 → 바이트코드 정상·Groth16 아님")}${tile("의심으로 넘어간 탐지", num(a.suspect), "옵티마이저가 상수를 합치거나 데이터 영역으로 옮긴 경우")}
+<div class="tiles">${
+    a.labeled === 0
+      ? tile("바이트코드 정확도", "확인 전", "proofgap bytecode check를 먼저 실행")
+      : `${tile("대조한 검증기", num(a.labeled))}${tile("오탐", num(a.falsePositive), "소스 정상 → 바이트코드 탐지")}
+${tile("놓침", num(a.falseNegative), "소스 탐지 → 바이트코드 정상·Groth16 아님")}`
+  }${tile("의심으로 넘어간 탐지", num(a.suspect), "옵티마이저가 상수를 합치거나 데이터 영역으로 옮긴 경우")}
 ${tile("테스트 벡터", `${num(tv.passed)}/${num(tv.total)}`, "합성·실제 양성·음성, 바이트코드, R3")}</div>`;
 
   const knownRows = s.known
