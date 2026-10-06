@@ -194,4 +194,6 @@ proofgap dashboard
 
 ## 라이선스
 
-미정
+[MIT](LICENSE). 누구나 자유롭게 쓰고 고치고 배포할 수 있습니다.
+
+다만 테스트 벡터 중 다른 프로젝트에서 온 파일은 각 파일에 적힌 원래 라이선스를 따릅니다. `testvectors/onchain/`은 체인에 배포된 컨트랙트의 검증된 소스(대부분 GPL-3.0, Hermez는 AGPL-3.0)이고, `testvectors/synthetic/`의 `.sol`은 snarkjs 템플릿으로 생성한 검증기(GPL-3.0)와 그 컴파일 결과입니다.
