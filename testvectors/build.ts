@@ -34,16 +34,17 @@ export async function buildTestVectors(opts: { refresh: boolean }): Promise<void
   await fetchOnchain(opts.refresh);
 }
 
-// 바이트코드 판정용: 합성 검증기를 옵티마이저 켬·끔으로 컴파일해 런타임 바이트코드를 저장한다.
-// 구형 템플릿은 옵티마이저가 γ·δ의 같은 상수를 합치므로(L15) 바이트코드 판정이 달라진다.
+// 바이트코드 판정용: 합성 검증기를 옵티마이저 끔(noopt)·켬 runs 200(opt)·켬 runs 20(size)으로 컴파일해
+// 런타임 바이트코드를 저장한다. 구형 템플릿은 옵티마이저가 γ·δ의 같은 상수를 합치고(L15),
+// runs가 낮으면 여러 번 쓰는 상수를 데이터 영역에 두고 CODECOPY로 읽는다(L33).
 const SOLC = { new: "0.8.28", old: "0.6.12" };
 export const BYTECODE_DIR = join(SYNTHETIC_DIR, "bytecode");
 
 function buildSyntheticBytecode(): void {
   mkdirSync(BYTECODE_DIR, { recursive: true });
   for (const [style, solc] of Object.entries(SOLC)) {
-    for (const optimize of [true, false]) {
-      const project = join(BUILD_DIR, `forge-${style}-${optimize ? "opt" : "noopt"}`);
+    for (const [variant, runs] of [["noopt", null], ["opt", "200"], ["size", "20"]] as const) {
+      const project = join(BUILD_DIR, `forge-${style}-${variant}`);
       mkdirSync(join(project, "src"), { recursive: true });
       const files = CIRCUITS.flatMap((c) => ["skip-phase2", "phase2"].map((phase) => `${c}.${phase}.${style}`));
       for (const f of files) {
@@ -51,14 +52,14 @@ function buildSyntheticBytecode(): void {
       }
       // forge는 --optimizer-runs만 줘도 옵티마이저를 켜므로, 끌 때는 --optimize false를 명시하고 runs는 넘기지 않는다.
       const args = ["build", "--root", project, "--use", solc, "--force"];
-      execFileSync("forge", optimize ? [...args, "--optimize", "true", "--optimizer-runs", "200"] : [...args, "--optimize", "false"], {
+      execFileSync("forge", runs ? [...args, "--optimize", "true", "--optimizer-runs", runs] : [...args, "--optimize", "false"], {
         stdio: "ignore",
       });
       for (const f of files) {
         const id = f.replaceAll(/[.-]/g, "_");
         const contract = style === "new" ? "Groth16Verifier" : "Verifier";
         const artifact = JSON.parse(readFileSync(join(project, "out", `${id}.sol`, `${contract}.json`), "utf8"));
-        const out = join(BYTECODE_DIR, `${f}.${optimize ? "opt" : "noopt"}.hex`);
+        const out = join(BYTECODE_DIR, `${f}.${variant}.hex`);
         writeFileSync(out, `${artifact.deployedBytecode.object}\n`);
         console.log(`  bytecode   ${out.slice(ROOT.length)}`);
       }

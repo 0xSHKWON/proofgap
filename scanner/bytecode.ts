@@ -11,8 +11,14 @@
 // 소스 판정이 있는 검증기로 확인한 결과는 docs/troubleshooting.md L28~L30.
 // suspect에는 옵티마이저가 같은 상수를 합친 진짜 결함(구형 템플릿, L15)과,
 // δ가 상수로 박혀 있지 않은 검증기(스토리지·calldata에서 읽음)가 섞여 있어 사람이 확인한다.
+// 옵티마이저 runs가 낮으면(예: 20) 여러 번 쓰는 상수를 PUSH 대신 데이터 영역에 두고 CODECOPY로 읽는다.
+// γ == δ면 생성원 좌표가 두 번 쓰여 PUSH에서 사라지므로, 좌표가 바이트코드 어딘가에 있기만 해도 suspect로 본다 (L33).
 
 import { G2_GENERATOR, g2Eq, type G2, isOnCurveG2 } from "../lib/bn254.ts";
+
+const GENERATOR_HEX = [G2_GENERATOR.x.im, G2_GENERATOR.x.re, G2_GENERATOR.y.im, G2_GENERATOR.y.re].map((v) =>
+  v.toString(16).padStart(64, "0"),
+);
 
 export type BytecodeVerdict = "detected" | "suspect" | "clean" | "not-groth16";
 
@@ -65,11 +71,13 @@ export function analyzeBytecode(bytecode: string): BytecodeAnalysis {
     if (g && d && g2Eq(g, d) && !g2Eq(p, g)) pattern = true;
   }
   const others = points.filter((p) => !isGen(p)).length;
+  const lower = bytecode.toLowerCase();
+  const generatorInData = GENERATOR_HEX.every((h) => lower.includes(h));
   const verdict: BytecodeVerdict = pattern
     ? "detected"
     : points.length >= 3
       ? "clean"
-      : generatorSites > 0 && others === 1
+      : (generatorSites > 0 || generatorInData) && others === 1
         ? "suspect"
         : "not-groth16";
   return { verdict, g2Points: points.length, generatorSites };

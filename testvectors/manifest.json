@@ -423,6 +423,50 @@
       "id": "bc-product3-phase2-old-opt",
       "path": "testvectors/synthetic/bytecode/product3.phase2.old.opt.hex",
       "expect": "clean"
+    },
+    {
+      "id": "bc-multiplier-skip-phase2-new-size",
+      "path": "testvectors/synthetic/bytecode/multiplier.skip-phase2.new.size.hex",
+      "expect": "suspect",
+      "note": "옵티마이저 runs 20: 두 번 쓰이는 생성원 좌표를 데이터 영역에 두고 CODECOPY로 읽음 (L33)"
+    },
+    {
+      "id": "bc-multiplier-skip-phase2-old-size",
+      "path": "testvectors/synthetic/bytecode/multiplier.skip-phase2.old.size.hex",
+      "expect": "suspect",
+      "note": "구형 템플릿 + 옵티마이저: 같은 상수를 합침 (L15)"
+    },
+    {
+      "id": "bc-multiplier-phase2-new-size",
+      "path": "testvectors/synthetic/bytecode/multiplier.phase2.new.size.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-multiplier-phase2-old-size",
+      "path": "testvectors/synthetic/bytecode/multiplier.phase2.old.size.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-product3-skip-phase2-new-size",
+      "path": "testvectors/synthetic/bytecode/product3.skip-phase2.new.size.hex",
+      "expect": "suspect",
+      "note": "옵티마이저 runs 20: 두 번 쓰이는 생성원 좌표를 데이터 영역에 두고 CODECOPY로 읽음 (L33)"
+    },
+    {
+      "id": "bc-product3-skip-phase2-old-size",
+      "path": "testvectors/synthetic/bytecode/product3.skip-phase2.old.size.hex",
+      "expect": "suspect",
+      "note": "구형 템플릿 + 옵티마이저: 같은 상수를 합침 (L15)"
+    },
+    {
+      "id": "bc-product3-phase2-new-size",
+      "path": "testvectors/synthetic/bytecode/product3.phase2.new.size.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-product3-phase2-old-size",
+      "path": "testvectors/synthetic/bytecode/product3.phase2.old.size.hex",
+      "expect": "clean"
     }
   ]
 }
