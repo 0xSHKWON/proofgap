@@ -27,7 +27,7 @@ export type BytecodeAnalysis = {
   verdict: BytecodeVerdict;
   g2Points: number; // 서로 다른 G2 점 개수 (생성원 포함)
   generatorSites: number; // 생성원이 G2 점으로 나온 자리 수
-  // β·γ·δ가 연달아 나오면 δ와 회로 식별자(바이트코드의 G1 점 집합 = α + IC). R3용
+  // β·γ·δ가 연달아 나오면 δ와 바이트코드의 G1 점(α, IC) 목록. R3용
   fingerprint?: Fingerprint;
 };
 

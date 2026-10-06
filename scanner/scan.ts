@@ -1,11 +1,11 @@
 // 후보 하나를 소스 수집 → 템플릿 분류 → 검증키 추출 → 규칙 판정까지 돌린다.
 
 import { join } from "node:path";
-import { applyRules, type RuleId } from "../rules/index.ts";
-import { type Chain, fetchContract } from "./fetch.ts";
 import { type Fingerprint, fingerprint } from "../lib/fingerprint.ts";
+import { applyRules, type RuleId } from "../rules/index.ts";
 import type { BytecodeAnalysis } from "./bytecode.ts";
 import { scanSources, type TemplateId } from "./extract.ts";
+import { type Chain, fetchContract } from "./fetch.ts";
 import { mapLimit } from "./http.ts";
 import { addCandidate, DATA_DIR, loadCandidates, readJson, saveCandidates, writeJson } from "./store.ts";
 
@@ -33,7 +33,7 @@ export type ScanRecord = {
     template: TemplateId;
     rules: RuleId[];
     notes: string[];
-    fingerprint?: Fingerprint; // R3용 δ와 회로 식별자
+    fingerprint?: Fingerprint; // R3용 δ와 G1 점(α, IC) 목록
   }[];
   unclassified: { contract: string; reason: string }[];
   errors: string[];
