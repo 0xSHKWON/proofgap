@@ -340,5 +340,89 @@
       },
       "note": "단계 1 스캔에서 찾은 회귀 벡터. verifyTx와 Pairing 라이브러리를 쓰는 템플릿 밖 검증기. 예전에는 검증기 아님으로 빠졌고, 이제 수동 검토 대기열로 가야 함"
     }
+  ],
+  "bytecodeVectors": [
+    {
+      "id": "bc-multiplier-skip-phase2-new-noopt",
+      "path": "testvectors/synthetic/bytecode/multiplier.skip-phase2.new.noopt.hex",
+      "expect": "detected"
+    },
+    {
+      "id": "bc-multiplier-skip-phase2-new-opt",
+      "path": "testvectors/synthetic/bytecode/multiplier.skip-phase2.new.opt.hex",
+      "expect": "detected"
+    },
+    {
+      "id": "bc-multiplier-skip-phase2-old-noopt",
+      "path": "testvectors/synthetic/bytecode/multiplier.skip-phase2.old.noopt.hex",
+      "expect": "detected"
+    },
+    {
+      "id": "bc-multiplier-skip-phase2-old-opt",
+      "path": "testvectors/synthetic/bytecode/multiplier.skip-phase2.old.opt.hex",
+      "expect": "suspect",
+      "note": "구형 템플릿은 γ·δ를 한 함수에서 대입해 옵티마이저가 같은 상수를 합침 (L15)"
+    },
+    {
+      "id": "bc-multiplier-phase2-new-noopt",
+      "path": "testvectors/synthetic/bytecode/multiplier.phase2.new.noopt.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-multiplier-phase2-new-opt",
+      "path": "testvectors/synthetic/bytecode/multiplier.phase2.new.opt.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-multiplier-phase2-old-noopt",
+      "path": "testvectors/synthetic/bytecode/multiplier.phase2.old.noopt.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-multiplier-phase2-old-opt",
+      "path": "testvectors/synthetic/bytecode/multiplier.phase2.old.opt.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-product3-skip-phase2-new-noopt",
+      "path": "testvectors/synthetic/bytecode/product3.skip-phase2.new.noopt.hex",
+      "expect": "detected"
+    },
+    {
+      "id": "bc-product3-skip-phase2-new-opt",
+      "path": "testvectors/synthetic/bytecode/product3.skip-phase2.new.opt.hex",
+      "expect": "detected"
+    },
+    {
+      "id": "bc-product3-skip-phase2-old-noopt",
+      "path": "testvectors/synthetic/bytecode/product3.skip-phase2.old.noopt.hex",
+      "expect": "detected"
+    },
+    {
+      "id": "bc-product3-skip-phase2-old-opt",
+      "path": "testvectors/synthetic/bytecode/product3.skip-phase2.old.opt.hex",
+      "expect": "suspect",
+      "note": "구형 템플릿은 γ·δ를 한 함수에서 대입해 옵티마이저가 같은 상수를 합침 (L15)"
+    },
+    {
+      "id": "bc-product3-phase2-new-noopt",
+      "path": "testvectors/synthetic/bytecode/product3.phase2.new.noopt.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-product3-phase2-new-opt",
+      "path": "testvectors/synthetic/bytecode/product3.phase2.new.opt.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-product3-phase2-old-noopt",
+      "path": "testvectors/synthetic/bytecode/product3.phase2.old.noopt.hex",
+      "expect": "clean"
+    },
+    {
+      "id": "bc-product3-phase2-old-opt",
+      "path": "testvectors/synthetic/bytecode/product3.phase2.old.opt.hex",
+      "expect": "clean"
+    }
   ]
 }

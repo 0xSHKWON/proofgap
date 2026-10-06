@@ -3,6 +3,7 @@
 import { join } from "node:path";
 import { applyRules, type RuleId } from "../rules/index.ts";
 import { type Chain, fetchContract } from "./fetch.ts";
+import type { BytecodeAnalysis } from "./bytecode.ts";
 import { scanSources, type TemplateId } from "./extract.ts";
 import { mapLimit } from "./http.ts";
 import { addCandidate, DATA_DIR, loadCandidates, readJson, saveCandidates, writeJson } from "./store.ts";
@@ -15,7 +16,8 @@ export type ScanStatus =
   | "embedded" // 이 주소의 컨트랙트는 검증기가 아니지만, 소스 파일에 규칙에 걸리는 검증기가 함께 들어 있음
   | "proxy" // 소스에 검증기가 없고 구현 컨트랙트를 따로 스캔함
   | "not-verifier" // 검증된 소스에 검증기가 없음
-  | "unverified"; // 소스 미검증 (단계 4: 바이트코드 분석 대기)
+  | "unverified" // 소스 미검증. bytecode 필드에 바이트코드 판정이 붙을 수 있음
+  | "bytecode-detected"; // 소스 미검증인데 바이트코드 판정으로 탐지 (단계 4)
 
 export type ScanRecord = {
   chain: Chain;
@@ -30,6 +32,7 @@ export type ScanRecord = {
   verifiedTwin: string | null;
   implementations: string[];
   g2GenCount: number | null;
+  bytecode?: BytecodeAnalysis; // 바이트코드 판정 (proofgap bytecode scan)
   scannedAt: string;
 };
 
