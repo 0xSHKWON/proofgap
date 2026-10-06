@@ -59,7 +59,8 @@ export async function checkExposure(chain: Chain, verifier: string, name: string
 export async function runExposure(chain: Chain, opts: { refresh: boolean; log: (s: string) => void }): Promise<void> {
   const out = loadExposure(chain);
   const detected = Object.values(loadResults(chain)).filter(
-    (r) => r.status === "detected" && (opts.refresh || !out[r.address]),
+    // 바이트코드로만 탐지한 건(bytecode-detected)도 같은 방식으로 확인한다.
+    (r) => (r.status === "detected" || r.status === "bytecode-detected") && (opts.refresh || !out[r.address]),
   );
   opts.log(`[${chain}] 탐지 ${detected.length}건의 노출 확인`);
   for (const [i, r] of detected.entries()) {

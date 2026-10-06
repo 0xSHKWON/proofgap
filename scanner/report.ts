@@ -6,6 +6,7 @@ import { loadCandidates } from "./store.ts";
 
 const ORDER: ScanStatus[] = [
   "detected",
+  "bytecode-detected",
   "embedded",
   "error",
   "unclassified",
@@ -58,11 +59,12 @@ export function printReport(chain: Chain): void {
       .map((v) => `${v.contract}[${v.rules.join(",")}]`)
       .join(" "),
   );
+  show("bytecode-detected", "바이트코드 판정 탐지 (소스 미검증) — 비공개", (r) => `G2 점 ${r.bytecode?.g2Points}`);
   show(
     "unverified",
-    "소스 미검증인데 G2 생성원이 2번 이상 — 단계 4 우선 검토",
-    (r) => `g2GenCount=${r.g2GenCount}`,
-    (r) => (r.g2GenCount ?? 0) >= 2,
+    "바이트코드 판정 의심 — 옵티마이저가 상수를 합쳤거나 δ가 상수로 없음. 사람이 확인",
+    (r) => `G2 점 ${r.bytecode?.g2Points}`,
+    (r) => r.bytecode?.verdict === "suspect",
   );
   const mismatch = records.filter(
     (r) =>

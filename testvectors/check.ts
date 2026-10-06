@@ -1,8 +1,12 @@
 // manifest.json의 모든 벡터를 분류 → 추출 → 규칙 판정에 넣고 기대 결과와 비교한다.
+// bytecodeVectors는 소스 없이 바이트코드 판정만 확인한다.
 
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { applyRules, RULES, type RuleId } from "../rules/index.ts";
+import { analyzeBytecode } from "../scanner/bytecode.ts";
 import { scanSources, type TemplateId } from "../scanner/extract.ts";
-import { loadManifest, loadVectorSource, type Vector } from "./manifest.ts";
+import { loadBytecodeVectors, loadManifest, loadVectorSource, ROOT, type Vector } from "./manifest.ts";
 
 type Outcome = {
   vector: Vector;
@@ -33,9 +37,20 @@ export function checkTestVectors(): boolean {
     console.log(`  ${rule.id} ${rule.title.padEnd(26)} TP ${m.tp}  FP ${m.fp}  FN ${m.fn}  TN ${m.tn}`);
   }
 
+  console.log("\n바이트코드 판정");
+  let bcFailed = 0;
+  const bcVectors = loadBytecodeVectors();
+  for (const v of bcVectors) {
+    const { verdict } = analyzeBytecode(readFileSync(join(ROOT, v.path), "utf8").trim());
+    const pass = verdict === v.expect;
+    if (!pass) bcFailed++;
+    console.log(`${pass ? "PASS" : "FAIL"}  ${v.id.padEnd(40)} ${verdict}${pass ? "" : `  — 기대 ${v.expect}`}`);
+  }
+
   const failed = outcomes.filter((o) => !o.pass).length;
-  console.log(`\n${outcomes.length - failed}/${outcomes.length} 통과`);
-  return failed === 0;
+  const total = outcomes.length + bcVectors.length;
+  console.log(`\n${total - failed - bcFailed}/${total} 통과`);
+  return failed + bcFailed === 0;
 }
 
 function evaluate(vector: Vector): Outcome {
