@@ -5,6 +5,7 @@ import { type Chain, isChain } from "../scanner/fetch.ts";
 import { runBytecodeRefs } from "../exposure/bytecode-refs.ts";
 import { checkExposure, printExposure, runExposure } from "../exposure/index.ts";
 import { checkBytecode, scanBytecode } from "../scanner/bytecode-scan.ts";
+import { printR3 } from "../rules/r3.ts";
 import { printReport } from "../scanner/report.ts";
 import { printTriage, runTriage, writeDraft } from "../triage/index.ts";
 import { scanAddress, scanCandidates, type ScanStatus } from "../scanner/scan.ts";
@@ -26,6 +27,7 @@ const USAGE = `사용법:
   proofgap report --chain C                     결과 요약, 탐지·미분류 목록
   proofgap bytecode check --chain C             소스 판정이 있는 검증기로 바이트코드 판정 정확도 확인
   proofgap bytecode scan --chain C              소스 미검증 후보를 바이트코드로 판정
+  proofgap rules r3                             모든 체인에서 같은 δ를 서로 다른 회로가 재사용한 묶음 (R3)
 
   proofgap exposure --chain C [--refresh]       탐지 전체의 호출자·잔고·권한 확인 후 요약 (확인한 건은 건너뜀)
   proofgap exposure --chain C --address 0x...   검증기 하나만 확인 (저장하지 않음)
@@ -67,6 +69,11 @@ async function main(argv: string[]): Promise<number> {
     return 0;
   }
   if (cmd === "testvectors" && sub === "check") return checkTestVectors() ? 0 : 1;
+
+  if (cmd === "rules" && sub === "r3") {
+    printR3();
+    return 0;
+  }
 
   const chain = values.chain;
   if (!chain || !isChain(chain)) {

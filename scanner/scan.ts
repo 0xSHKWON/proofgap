@@ -3,6 +3,7 @@
 import { join } from "node:path";
 import { applyRules, type RuleId } from "../rules/index.ts";
 import { type Chain, fetchContract } from "./fetch.ts";
+import { type Fingerprint, fingerprint } from "../lib/fingerprint.ts";
 import type { BytecodeAnalysis } from "./bytecode.ts";
 import { scanSources, type TemplateId } from "./extract.ts";
 import { mapLimit } from "./http.ts";
@@ -26,7 +27,14 @@ export type ScanRecord = {
   status: ScanStatus;
   // main: 이 주소에 배포된 컨트랙트인지. false면 같은 소스 파일에 들어 있을 뿐 다른 주소에 배포된 것이다
   // (예: Veil 풀 소스에 평탄화된 Verifier). 판정 상태는 main만 보고 정한다.
-  verifiers: { contract: string; main: boolean; template: TemplateId; rules: RuleId[]; notes: string[] }[];
+  verifiers: {
+    contract: string;
+    main: boolean;
+    template: TemplateId;
+    rules: RuleId[];
+    notes: string[];
+    fingerprint?: Fingerprint; // R3용 δ와 회로 식별자
+  }[];
   unclassified: { contract: string; reason: string }[];
   errors: string[];
   verifiedTwin: string | null;
@@ -74,6 +82,7 @@ export async function scanAddress(chain: Chain, address: string): Promise<ScanRe
     template: v.template,
     rules: applyRules(v.vk),
     notes: v.notes,
+    fingerprint: fingerprint(v.vk.delta, [v.vk.alpha, ...v.vk.ic]),
   }));
   const main = verifiers.filter((v) => v.main);
   const record: ScanRecord = {

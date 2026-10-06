@@ -3,10 +3,12 @@
 
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { fingerprint } from "../lib/fingerprint.ts";
 import { applyRules, RULES, type RuleId } from "../rules/index.ts";
+import { findDeltaReuse } from "../rules/r3.ts";
 import { analyzeBytecode } from "../scanner/bytecode.ts";
 import { scanSources, type TemplateId } from "../scanner/extract.ts";
-import { loadBytecodeVectors, loadManifest, loadVectorSource, ROOT, type Vector } from "./manifest.ts";
+import { loadBytecodeVectors, loadManifest, loadR3Groups, loadVectorSource, ROOT, type Vector } from "./manifest.ts";
 
 type Outcome = {
   vector: Vector;
@@ -47,8 +49,20 @@ export function checkTestVectors(): boolean {
     console.log(`${pass ? "PASS" : "FAIL"}  ${v.id.padEnd(40)} ${verdict}${pass ? "" : `  — 기대 ${v.expect}`}`);
   }
 
-  const failed = outcomes.filter((o) => !o.pass).length;
-  const total = outcomes.length + bcVectors.length;
+  // R3: 모든 소스 벡터의 지문을 모아 δ 재사용 묶음이 기대와 같은지 본다.
+  console.log("\nR3 (같은 δ를 서로 다른 회로가 재사용)");
+  const entries = loadManifest().flatMap((v) => {
+    const hit = scanSources(loadVectorSource(v)).verifiers.find((h) => !v.contract || h.contract === v.contract);
+    return hit ? [{ id: v.id, fingerprint: fingerprint(hit.vk.delta, [hit.vk.alpha, ...hit.vk.ic]) }] : [];
+  });
+  const key = (ids: string[]) => [...ids].sort().join(",");
+  const got = findDeltaReuse(entries).map((g) => key(g.members));
+  const want = loadR3Groups().map(key);
+  const r3Pass = got.length === want.length && want.every((w) => got.includes(w));
+  console.log(`${r3Pass ? "PASS" : "FAIL"}  묶음 ${got.length}개${r3Pass ? "" : `  — 기대 ${JSON.stringify(want)}, 실제 ${JSON.stringify(got)}`}`);
+
+  const failed = outcomes.filter((o) => !o.pass).length + (r3Pass ? 0 : 1);
+  const total = outcomes.length + bcVectors.length + 1;
   console.log(`\n${total - failed - bcFailed}/${total} 통과`);
   return failed + bcFailed === 0;
 }
