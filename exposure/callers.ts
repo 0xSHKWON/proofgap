@@ -84,13 +84,17 @@ export async function findCallers(
   const info = await getJson<{ creator_address_hash?: string | null }>(`${api}/addresses/${verifier}`);
   const deployer = info.creator_address_hash;
   if (deployer) {
-    const created = await memo(`${chain}:created:${deployer}`, async () => {
+    const { created, complete } = await memo(`${chain}:created:${deployer}`, async () => {
       const out: Ref[] = [];
+      let n = 0;
       for await (const items of pages<{ created_contract: Ref | null }>(`${api}/addresses/${deployer}/transactions`)) {
+        n++;
         for (const it of items) if (it.created_contract) out.push(it.created_contract);
       }
-      return out;
+      // MAX_PAGES까지 다 읽었다면 그 뒤에 더 있을 수 있다.
+      return { created: out, complete: n < MAX_PAGES };
     });
+    if (!complete) truncated = true;
     const others = created.filter((ref) => ref.hash.toLowerCase() !== v);
     const refs = await mapLimit(others, 6, async (ref) => referencesVerifier(await contractState(chain, ref.hash), v));
     others.forEach((ref, i) => {

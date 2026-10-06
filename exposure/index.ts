@@ -84,7 +84,7 @@ export function printExposure(chain: Chain): void {
   for (const l of LEVEL_ORDER) console.log(`  ${l.padEnd(8)} ${records.filter((r) => r.level === l).length}`);
 
   for (const r of records) {
-    console.log(`\n${r.verifier}  ${r.name ?? "-"}  → ${r.level} (${usd(r.totalUsd)})${r.internalTxError ? "  [호출 내역 확인 실패]" : r.callersTruncated ? "  [호출 내역 일부만 확인]" : ""}`);
+    console.log(`\n${r.verifier}  ${r.name ?? "-"}  → ${r.level} (${usd(r.totalUsd)})${r.internalTxError ? "  [호출 내역 확인 실패]" : r.callersTruncated ? "  [호출자 일부만 확인]" : ""}`);
     for (const c of r.callers) {
       const p = c.permissions;
       const perm = [
