@@ -17,7 +17,7 @@ const USAGE = `사용법:
 
   proofgap candidates crawl  --chain C [--days 7]               페어링 프리컴파일 호출자 수집 (이어서 실행 가능)
   proofgap candidates search --chain C [--term Verifier] [--max-pages 200]   검증 컨트랙트 이름 검색
-  proofgap candidates bigquery --chain ethereum [--dry-run]     바이트코드에서 G2 생성원 검색 (bq CLI 필요)
+  proofgap candidates bigquery --chain ethereum|polygon [--dry-run]   바이트코드에서 G2 생성원 검색 (bq CLI 필요)
   proofgap candidates import --chain C --file F.csv [--via V]   address 열이 있는 CSV 가져오기
 
   proofgap scan --chain C --address 0x...       컨트랙트 하나 판정 (저장하지 않음)
@@ -30,12 +30,12 @@ const USAGE = `사용법:
   proofgap exposure --chain C [--refresh]       탐지 전체의 호출자·잔고·권한 확인 후 요약 (확인한 건은 건너뜀)
   proofgap exposure --chain C --address 0x...   검증기 하나만 확인 (저장하지 않음)
   proofgap exposure --chain C --report          저장된 결과 요약만
-  proofgap exposure refs --chain ethereum [--dry-run]   바이트코드에 검증기 주소가 있는 컨트랙트 (BigQuery)
+  proofgap exposure refs --chain ethereum|polygon [--dry-run]   바이트코드에 검증기 주소가 있는 컨트랙트 (BigQuery)
 
   proofgap triage --chain C [--report]          탐지·노출 결과로 우선순위와 연락처 후보 정리 (docs/disclosure.md)
   proofgap triage draft --chain C --address 0x...   비공개 제보 초안 (data/triage/drafts/)
 
-  C = ethereum | base. 수집·판정 결과는 data/에 저장되고 커밋되지 않는다.`;
+  C = ethereum | base | arbitrum | optimism | polygon. 수집·판정 결과는 data/에 저장되고 커밋되지 않는다.`;
 
 const log = (s: string) => console.log(s);
 

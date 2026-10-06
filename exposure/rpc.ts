@@ -6,6 +6,9 @@ import { sleep } from "../scanner/http.ts";
 const RPC_URLS: Record<Chain, string> = {
   ethereum: process.env.ETHEREUM_RPC_URL ?? "https://ethereum-rpc.publicnode.com",
   base: process.env.BASE_RPC_URL ?? "https://mainnet.base.org",
+  arbitrum: process.env.ARBITRUM_RPC_URL ?? "https://arbitrum-one-rpc.publicnode.com",
+  optimism: process.env.OPTIMISM_RPC_URL ?? "https://optimism-rpc.publicnode.com",
+  polygon: process.env.POLYGON_RPC_URL ?? "https://polygon-bor-rpc.publicnode.com",
 };
 
 type ReadMethod = "eth_call" | "eth_getCode" | "eth_getStorageAt" | "eth_getBalance" | "eth_blockNumber";
