@@ -4,7 +4,7 @@
 
 **proofgap**은 체인에 배포된 ZK 검증 컨트랙트에서 **경계 결함**을 찾아내는 스캐너입니다. 경계 결함이란 증명 시스템은 설계대로 작동했는데, 그 바깥(셋업, 정산 로직, 검증 범위)이 잘못돼 생기는 결함을 말합니다. 결함이 있는 검증기를 찾으면, 그 검증기를 믿는 컨트랙트에 자산이 얼마나 묶여 있는지까지 함께 확인합니다.
 
-> **상태: 단계 4 완료.** 테스트 벡터(`testvectors`), 후보 수집(`candidates`), 판정(`scan`, `bytecode`), 요약(`report`), 노출 연결(`exposure`), 트리아지(`triage`)가 구현돼 있습니다. Arbitrum·Optimism·Polygon과 R3를 추가했고, BNB와 R4는 보류했습니다.
+> **상태: 단계 5 (공개).** 스캔 통계: https://0xshkwon.github.io/proofgap/stats/ · 테스트 벡터(`testvectors`), 후보 수집(`candidates`), 판정(`scan`, `bytecode`), 요약(`report`), 노출 연결(`exposure`), 트리아지(`triage`), 대시보드(`dashboard`)가 구현돼 있습니다. Arbitrum·Optimism·Polygon과 R3를 추가했고, BNB와 R4는 보류했습니다.
 
 ---
 
@@ -109,6 +109,9 @@ proofgap bytecode scan  --chain ethereum
 # R3: 모든 체인에서 같은 δ를 서로 다른 회로가 재사용한 묶음
 proofgap rules r3
 
+# 대시보드: 내부용(개별 주소 포함)과 공개용(집계 숫자만)을 data/dashboard/에 생성
+proofgap dashboard
+
 # 노출 연결: 탐지된 검증기마다 호출자 → 잔고 → 권한 (결과는 data/exposure/, 커밋되지 않음)
 proofgap exposure --chain base
 proofgap exposure --chain base --report
@@ -144,7 +147,7 @@ proofgap triage draft --chain base --address 0x...
 - **메인넷에서 자금을 움직이는 트랜잭션은 절대 보내지 않습니다.** 재현은 로컬 포크에서만 합니다. 화이트햇 구조가 필요하면 SEAL 911 같은 전문 조직에 넘깁니다.
 - **자산이 묶인 취약 검증기는 비공개 제보가 먼저입니다.** 개별 주소는 조치가 끝나거나 유예 기간이 지난 뒤에만 공개합니다.
 - **위조 증명 생성 코드는 공개하지 않습니다.** `repro/`는 공개 릴리스에서 제외합니다.
-- **공개 통계는 집계 수치만 담습니다.** 스캔 수, 검증기 수, 규칙별 탐지 수, 자산 보유 건수가 해당됩니다.
+- **공개 통계에는 집계 수치, 판정 정확도, 이미 공개된 사고의 주소만 담습니다.** 그 밖의 탐지 건은 주소를 싣지 않고, `proofgap dashboard`가 미공개 주소가 섞이면 생성을 멈춥니다.
 
 절차는 [`docs/disclosure.md`](docs/disclosure.md)에 있습니다.
 
@@ -163,7 +166,7 @@ proofgap triage draft --chain base --address 0x...
 - [x] **단계 2. 노출 연결:** 확인된 모든 건에 자산 유무 판정
 - [x] **단계 3. 트리아지·디스클로저:** 자산이 묶인 건 전부 제보 완료
 - [x] **단계 4. 확장:** 소스 미검증 바이트코드, 체인 추가(Arbitrum·Optimism·Polygon), R3. BNB(무료 후보 수집 경로 없음)와 R4는 보류
-- [ ] **단계 5. 공개:** 집계 통계 페이지, 스코어카드 파일럿, 아티클
+- [x] **단계 5. 공개:** 공개 통계 페이지 ([stats](https://0xshkwon.github.io/proofgap/stats/)). 스코어카드·아티클은 하지 않음
 
 ## 팀
 

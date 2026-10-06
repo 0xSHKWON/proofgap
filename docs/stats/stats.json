@@ -1,0 +1,532 @@
+{
+  "generatedAt": "2026-10-06T04:12:38.268Z",
+  "materialUsd": 100,
+  "chains": [
+    {
+      "chain": "ethereum",
+      "candidates": 2188,
+      "verifiers": 1181,
+      "detected": 55,
+      "suspect": 276,
+      "material": 0,
+      "r3": 6
+    },
+    {
+      "chain": "base",
+      "candidates": 1801,
+      "verifiers": 209,
+      "detected": 22,
+      "suspect": 8,
+      "material": 0,
+      "r3": 1
+    },
+    {
+      "chain": "arbitrum",
+      "candidates": 1228,
+      "verifiers": 135,
+      "detected": 0,
+      "suspect": 0,
+      "material": 0,
+      "r3": 1
+    },
+    {
+      "chain": "optimism",
+      "candidates": 608,
+      "verifiers": 133,
+      "detected": 4,
+      "suspect": 0,
+      "material": 0,
+      "r3": 2
+    },
+    {
+      "chain": "polygon",
+      "candidates": 1563,
+      "verifiers": 927,
+      "detected": 58,
+      "suspect": 166,
+      "material": 0,
+      "r3": 13
+    }
+  ],
+  "r3Groups": 2,
+  "accuracy": {
+    "labeled": 867,
+    "falsePositive": 0,
+    "falseNegative": 0,
+    "suspect": 7,
+    "testVectors": {
+      "total": 48,
+      "passed": 48,
+      "sets": {
+        "바이트코드": 24,
+        "R3": 1,
+        "known-positive": 4,
+        "synthetic-positive": 5,
+        "synthetic-negative": 4,
+        "real-negative": 10
+      }
+    }
+  },
+  "known": [
+    {
+      "chain": "ethereum",
+      "verifier": "0x02c30d32a92a3c338bc43b78933d293ded4f68c6",
+      "name": "Update179G16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x021d05b1ee466e74fa3a6d935130913860fd98c5",
+      "name": "Update3G16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+      "name": "Update89G16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x7f077ffe852916000c701777d7cb32b03161e167",
+      "name": "Update1G16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0xc5c40bec17d23ee2acca17f2453bcdd32be02289",
+      "name": "Update21G16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x6c549f7128c943f7a39c1ec10a550abddba44b22",
+      "name": "WithdrawG16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0xc59adf07fce55dd0f1f1162d5ce1bcc057879105",
+      "name": "CancelBetG16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x3eafa93af66c2847d92e4bbf291430988e47c7db",
+      "name": "Update44G16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x01c99e39bdb2f73d8a4f0c08e1de2dff435a4287",
+      "name": "Update5G16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x5292479110d820a9b03fc9d6891c5f9cb1c0e291",
+      "name": "Update11G16Verifier",
+      "callers": [
+        {
+          "address": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x326b83865cdbeccc1e24a583f3b32e2303ea2850",
+      "name": "Update179G16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+      "name": "Update21G16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0xcd6a87d333c9c3bf9302b04ad36928eec5bba587",
+      "name": "Update1G16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0xc043865fb4d542e2bc5ed5ed9a2f0939965671a6",
+      "name": "WithdrawG16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x5b7f3691675affedcb357a15951dd3965ee9bf4b",
+      "name": "Update44G16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0xdbf505b7f76075f699efc66ab0868e6bbce4084c",
+      "name": "Update11G16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x26fb9b040a680e800db862d4b1479269a4cba356",
+      "name": "Update3G16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0xad61d88f29dd1c598dd683ad69375cdf45fbf769",
+      "name": "Update5G16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x64eb221c93eb4a5efefda0fed6d49cfd3506ef14",
+      "name": "CancelBetG16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "ethereum",
+      "verifier": "0x252073bd4e91d99cf136c3e61dd7a42321eceb7b",
+      "name": "Update89G16Verifier",
+      "callers": [
+        {
+          "address": "0x239af915abcd0a5dcb8566e863088423831951f8",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0xdbf505b7f76075f699efc66ab0868e6bbce4084c",
+      "name": "Update179G16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0xad61d88f29dd1c598dd683ad69375cdf45fbf769",
+      "name": "Update89G16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0xcd6a87d333c9c3bf9302b04ad36928eec5bba587",
+      "name": "Update21G16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x64eb221c93eb4a5efefda0fed6d49cfd3506ef14",
+      "name": "Update11G16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x26fb9b040a680e800db862d4b1479269a4cba356",
+      "name": "Update44G16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0xe51a46f15f1d6c21cea1710fe88bb44f17ddaa18",
+      "name": "Update3G16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0xa15adc222902120557bb450ffa0ad41f7bb90975",
+      "name": "Update1G16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0xc5c40bec17d23ee2acca17f2453bcdd32be02289",
+      "name": "Update89G16Verifier",
+      "callers": [
+        {
+          "address": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x5292479110d820a9b03fc9d6891c5f9cb1c0e291",
+      "name": "Update44G16Verifier",
+      "callers": [
+        {
+          "address": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x01c99e39bdb2f73d8a4f0c08e1de2dff435a4287",
+      "name": "Update21G16Verifier",
+      "callers": [
+        {
+          "address": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x021d05b1ee466e74fa3a6d935130913860fd98c5",
+      "name": "Update11G16Verifier",
+      "callers": [
+        {
+          "address": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x7f077ffe852916000c701777d7cb32b03161e167",
+      "name": "Update5G16Verifier",
+      "callers": [
+        {
+          "address": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x4ffb1af56ada260d74cadeaacca989f1b21bf587",
+      "name": "WithdrawG16Verifier",
+      "callers": [
+        {
+          "address": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0xc59adf07fce55dd0f1f1162d5ce1bcc057879105",
+      "name": "Update3G16Verifier",
+      "callers": [
+        {
+          "address": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x16fd0f88e2aa9a0e5d6b905c89a4cbb2b9a883b0",
+      "name": "CancelBetG16Verifier",
+      "callers": [
+        {
+          "address": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x6c549f7128c943f7a39c1ec10a550abddba44b22",
+      "name": "Update1G16Verifier",
+      "callers": [
+        {
+          "address": "0x750b10952d49ff1676772a9471d0deac0605ba64",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x02c30d32a92a3c338bc43b78933d293ded4f68c6",
+      "name": "WithdrawG16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0xd5a3bbb90f919bb7eb53c0909f4e62f42f087add",
+      "name": "CancelBetG16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0xc043865fb4d542e2bc5ed5ed9a2f0939965671a6",
+      "name": "Update5G16Verifier",
+      "callers": [
+        {
+          "address": "0xdb203504ba1fea79164af3ceffba88c59ee8aafd",
+          "name": "FoomLottery"
+        }
+      ]
+    },
+    {
+      "chain": "base",
+      "verifier": "0x1e65c075989189e607ddafa30fa1a0001c376cfd",
+      "name": "Verifier",
+      "callers": [
+        {
+          "address": "0xd3560ef60dd06e27b699372c3da1b741c80b7d90",
+          "name": "Veil_01_ETH"
+        },
+        {
+          "address": "0x9ccdff5f69d93f4fcd6be81feb7f79649cb6319b",
+          "name": "Veil_1_ETH"
+        },
+        {
+          "address": "0x6c206b5389de4e5a23fdf13bf38104ce8dd2ed5f",
+          "name": "Veil_0005_ETH"
+        },
+        {
+          "address": "0xc53510d6f535ba0943b1007f082af3410fbea4f7",
+          "name": "Veil_005_ETH"
+        },
+        {
+          "address": "0x844bb2917dd363be5567f9587151c2aaa2e345d2",
+          "name": "Veil_001_ETH"
+        },
+        {
+          "address": "0xa4db5ec5d0a2ee01ccd8d6e2e53224cf4e81a9b3",
+          "name": "VEIL_200_USDC"
+        }
+      ]
+    }
+  ]
+}

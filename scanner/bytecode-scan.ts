@@ -2,12 +2,17 @@
 //   check: 소스로 판정이 끝난 검증기로 바이트코드 판정의 정확도를 잰다 (정답 = 소스 판정)
 //   scan:  소스 미검증 후보에 바이트코드 판정을 붙인다. 탐지면 상태를 bytecode-detected로 바꾼다
 
+import { join } from "node:path";
 import { getCode } from "../exposure/rpc.ts";
 import { analyzeBytecode, type BytecodeVerdict } from "./bytecode.ts";
 import type { Chain } from "./fetch.ts";
 import { mapLimit } from "./http.ts";
 import { loadResults, resultsPath } from "./scan.ts";
-import { writeJson } from "./store.ts";
+import { DATA_DIR, writeJson } from "./store.ts";
+
+// 정확도 확인 결과. 대시보드의 공개 페이지가 읽는다 (개별 주소 없음).
+export type BytecodeValidation = { chain: Chain; checkedAt: string; matrix: Record<string, number> };
+export const validationPath = (chain: Chain) => join(DATA_DIR, "validation", `${chain}.bytecode.json`);
 
 export async function checkBytecode(chain: Chain, opts: { log: (s: string) => void }): Promise<void> {
   const labeled = Object.values(loadResults(chain)).filter((r) => r.status === "detected" || r.status === "clean");
@@ -25,6 +30,7 @@ export async function checkBytecode(chain: Chain, opts: { log: (s: string) => vo
     }
   });
   for (const [k, n] of Object.entries(m).sort()) opts.log(`  소스 ${k.replace("→", " → 바이트코드 ")}: ${n}`);
+  writeJson(validationPath(chain), { chain, checkedAt: new Date().toISOString(), matrix: m } satisfies BytecodeValidation);
   if (misses.length) {
     opts.log("  판정이 갈린 것 — 비공개");
     for (const x of misses) opts.log(`    ${x}`);
