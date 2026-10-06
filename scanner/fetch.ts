@@ -4,9 +4,15 @@
 import { getJson, HttpError } from "./http.ts";
 import type { SourceFile } from "./source.ts";
 
+// bigquery: 바이트코드가 들어 있는 contracts 테이블. Polygon은 2024-09 이후 갱신이 멈춰 그 뒤 배포분은 없다.
+// Arbitrum·Optimism·Polygon의 goog_blockchain 데이터셋은 contracts 테이블이 없고, 생성 트랜잭션 input을
+// 검색하면 1.4~11.6 TB라 무료 한도(월 1 TB)를 넘는다 (L32).
 export const CHAINS = {
-  ethereum: { chainId: 1, blockscout: "https://eth.blockscout.com" },
-  base: { chainId: 8453, blockscout: "https://base.blockscout.com" },
+  ethereum: { chainId: 1, blockscout: "https://eth.blockscout.com", bigquery: "bigquery-public-data.crypto_ethereum.contracts" },
+  base: { chainId: 8453, blockscout: "https://base.blockscout.com", bigquery: null },
+  arbitrum: { chainId: 42161, blockscout: "https://arbitrum.blockscout.com", bigquery: null },
+  optimism: { chainId: 10, blockscout: "https://explorer.optimism.io", bigquery: null },
+  polygon: { chainId: 137, blockscout: "https://polygon.blockscout.com", bigquery: "bigquery-public-data.crypto_polygon.contracts" },
 } as const;
 
 export type Chain = keyof typeof CHAINS;

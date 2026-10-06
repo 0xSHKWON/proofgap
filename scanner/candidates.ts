@@ -3,7 +3,7 @@
 //   precompile  페어링 프리컴파일(0x08)을 호출한 컨트랙트. 실제로 쓰인 검증기만 잡힌다.
 //               Blockscout가 오래된 구간에서 타임아웃이 나서 최근 기간만 안정적으로 훑을 수 있다.
 //   name:<q>    Blockscout 검증 컨트랙트 이름 검색. 호출된 적 없는 검증기도 잡지만 이름을 바꾸면 놓친다.
-//   bigquery    이더리움 전체 바이트코드에서 G2 생성원 상수를 찾은 결과 (scanner/sql/ 참고).
+//   bigquery    체인 전체 바이트코드에서 G2 생성원 상수를 찾은 결과 (이더리움, Polygon. scanner/sql/ 참고).
 
 import { execFileSync } from "node:child_process";
 import { mkdirSync, readFileSync, writeFileSync } from "node:fs";
@@ -150,13 +150,14 @@ export function importCsv(chain: Chain, file: string, via: string): number {
   return found;
 }
 
-const BIGQUERY_SQL = join(new URL(".", import.meta.url).pathname, "sql", "ethereum_g2_generator.sql");
+const BIGQUERY_SQL = join(new URL(".", import.meta.url).pathname, "sql", "g2_generator.sql");
 
 // bq CLI로 쿼리를 돌린다. dryRun이면 처리할 바이트 수만 확인한다 (BigQuery 무료 한도는 월 1TB).
 export function runBigQuery(chain: Chain, opts: { dryRun: boolean; log: (s: string) => void }): void {
-  if (chain !== "ethereum") throw new Error("BigQuery 공개 데이터셋은 이더리움만 있음");
+  const table = CHAINS[chain].bigquery;
+  if (!table) throw new Error(`${chain}: 바이트코드가 있는 BigQuery 공개 테이블이 없음`);
   // SQL이 -- 주석으로 시작하면 bq가 옵션으로 읽으므로 표준입력으로 넘긴다.
-  const input = readFileSync(BIGQUERY_SQL, "utf8");
+  const input = readFileSync(BIGQUERY_SQL, "utf8").replaceAll("{{table}}", table);
   const args = ["query", "--nouse_legacy_sql", "--format=csv", "--max_rows=10000000"];
   if (opts.dryRun) {
     const out = execFileSync("bq", [...args, "--dry_run"], { encoding: "utf8", input });
